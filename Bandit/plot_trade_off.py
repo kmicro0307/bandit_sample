@@ -5,7 +5,7 @@ plt.figure(figsize=(20, 15), dpi=50)
 
 #ファイルの読み込み。最後だけ
 st = pd.read_csv('stationary.csv')[99998:-1]
-non_st = pd.read_csv('nonstationary.csv')[99998:-1]
+non_st = pd.read_csv('non_stationary.csv')[99998:-1]
 # non_st_const = pd.read_csv('nonsteady_constant.csv')[99998:-1]
 # st = pd.read_csv('test.csv')[99998:-1]
 # non_st = pd.read_csv('test1.csv')[99998:-1]
@@ -71,4 +71,4 @@ for i in range(len(names)):
 plt.xlabel("stationary")
 plt.ylabel("non_stationary")
 plt.savefig("trade_off")
-# plt.show()
+plt.show()
