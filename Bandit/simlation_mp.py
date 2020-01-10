@@ -16,6 +16,7 @@ def make_dir(dir_name):
     file_path = os.path.dirname(os.getcwd() + dir_name)
     if not os.path.exists(file_path):
         os.makedirs(file_path)
+
 def simulation(alg, step_num, k, is_nonstationary, is_constant, switch, seed):
     np.random.seed(seed=seed)
     labels = ["UCB1T", "TS", "RS", "RS OPT", "TS gamma", "RS gamma", "RS OPT gamma", "meta UCB1T", "meta TS", "meta RS",
@@ -28,21 +29,7 @@ def simulation(alg, step_num, k, is_nonstationary, is_constant, switch, seed):
     # print(sim + 1)
     bandit = en.Bandit(k)
     agent_list = {"UCB1T": ag.UCB1T(k),
-                  "TS": ag.TS(k),
-                  "RS_gamma": ag.RS_gamma(k, gamma=1.0),
-                  "RS_OPT": ag.RS_OPT(k),
-                  "TS_gamma": ag.TS_gamma(k),
-                  "RS_gamma2": ag.RS_gamma(k),
-                  "RS_OPT_gamma": ag.RS_OPT_gamma(k),
-                  "meta_UCB1T": ag.meta_bandit(k, agent=ag.UCB1T(k), higher_agent=ag.UCB1T(2),
-                                              l=500, delta=0, lmd=30),
-                  "meta_TS": ag.meta_bandit(k, agent=ag.TS(k),
-                                            higher_agent=ag.TS(2), l=30, delta=0, lmd=30),
-                  "meta_RS_gamma": ag.meta_bandit(k, agent=ag.RS_gamma(k, gamma=1.0), higher_agent=
-                  ag.RS_gamma(2, gamma=1.0), l=30, delta=0, lmd=30),
-                  "meta_RS_OPT": ag.meta_bandit(k, agent=ag.RS_OPT(k), higher_agent=ag.RS_OPT(2), l=30,
-                                                delta=0, lmd=30)}
-
+                  "TS": ag.TS(k)}
     agent = agent_list[alg]
     agent.opt_r = bandit.opt_r
     regret_sums = 0
@@ -51,7 +38,6 @@ def simulation(alg, step_num, k, is_nonstationary, is_constant, switch, seed):
     for step in range(step_num):
         prev_selected = 0
         regret = 0
-
         # バンディット変化
         if is_nonstationary:
             if is_constant:
@@ -77,9 +63,7 @@ def simulation(alg, step_num, k, is_nonstationary, is_constant, switch, seed):
         # regret
         regret_sums += bandit.get_regret(selected)
         regrets[step] += regret_sums
-
     #print('finished')
-
     return regrets
 
 def wrapper(args):
@@ -96,14 +80,13 @@ def multi_process(sampleList):
     p.close()
     return output
 
-#simulation(10, 1000, 20, 1, 1, 1)
 
+#simulation(10, 1000, 20, 1, 1, 1)
 args = sys.argv
 is_nonstationary = int(args[1])
 is_constant = int(args[2])
 print("is_nos:"+str(is_nonstationary))
 print("is_cons:"+str(is_constant))
-
 sim_num = 100
 dir_csv_name = "csv/"
 make_dir("/"+dir_csv_name)
@@ -112,8 +95,7 @@ agent_regrets = {}
 #time calcu
 start = time.time()
 
-args_list = ["UCB1T", "TS", "RS_gamma", "RS_OPT", "TS_gamma", "RS_gamma2", "RS_OPT_gamma", "meta_UCB1T", "meta_TS",
-             "meta_RS_gamma", "meta_RS_OPT"]
+args_list = ["UCB1T", "TS"]
 for x in range(len(args_list)):
     arg_list = [(args_list[x], 100000, 20, is_nonstationary, is_constant, 1, i) for i in range(sim_num)]
 #alg, step_num, k, is_nonstationary, is_constant, switch, seed
