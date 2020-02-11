@@ -31,7 +31,7 @@ def switch_calcu(sikou_list):
 
 
 def make_dir(dir_name):
-    file_path = os.path.dirname(os.getcwd() + '/output' + dir_name)
+    file_path = os.path.dirname(os.getcwd() + '/outputs' + dir_name)
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
@@ -72,10 +72,10 @@ def args_parser(args):
 
 if __name__ == '__main__':
     args = sys.argv
-    multiprocess = True
+    multiprocess = False
     print_flag = True
     is_nonstationary, is_constant, sim_name, switch, sim_num, str1, str2 = args_parser(args)
-    
+
     env = simlations.Simlations(sim_name)
 
     dir_csv_name = "csv/"
@@ -114,11 +114,11 @@ if __name__ == '__main__':
     df = pd.DataFrame(agent_regrets)
     if print_flag:
         if str(sim_name) == 'sim_switchtest':
-            print("output to csv:", path + str1 + str2 + 'switches.csv')
-            df.to_csv('.' + path + str1 + str2 + 'switches.csv')
+            print("output to csv:", './output'+path + str1 + str2 + 'switches.csv')
+            df.to_csv('./output' + path + str1 + str2 + 'switches.csv')
         else:
-            print("output to csv:", path+str1+str2+'regrets.csv')
-            df.to_csv('.'+path+str1+str2+'regrets.csv')
+            print("output to csv:", './output'+path+str1+str2+'regrets.csv')
+            df.to_csv('./output'+path+str1+str2+'regrets.csv')
     else:
         print('no output csv')
 
